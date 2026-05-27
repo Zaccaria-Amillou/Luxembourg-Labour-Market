@@ -15,7 +15,7 @@ from data_cleaning import load_and_clean
 st.set_page_config(
     page_title="Luxembourg Labour Market Dashboard",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="collapsed"
 )
 
 # GLOBAL STYLES
@@ -23,6 +23,8 @@ st.set_page_config(
 #   - DM Sans / DM Mono from Google Fonts for a clean, modern typographic feel
 #   - Metric cards get a white background, subtle border and shadow
 #   - .map-legend and .legend-gradient are used below the choropleth map
+#   - @media (max-width: 768px) overrides handle mobile: tighter padding,
+#     smaller metric values, stacked columns, and auto-collapsed sidebar
 st.markdown(
     """
     <style>
@@ -32,6 +34,7 @@ st.markdown(
         font-family: 'DM Sans', sans-serif;
     }
 
+    /* Desktop layout */
     .block-container {
         padding-top: 2rem;
         padding-left: 3rem;
@@ -76,6 +79,52 @@ st.markdown(
         height: 10px;
         border-radius: 5px;
         background: linear-gradient(to right, #ffffb2, #fecc5c, #fd8d3c, #f03b20, #bd0026);
+    }
+
+    /* Mobile overrides (max 768px)
+       Streamlit renders columns as flex children — forcing width:100% stacks
+       them vertically. Sidebar is hidden by default to maximise content area;
+       the hamburger toggle in the top-left still lets the user open it. */
+    @media (max-width: 768px) {
+
+        .block-container {
+            padding-top: 1rem;
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        /* Stack all columns vertically */
+        div[data-testid="column"] {
+            width: 100% !important;
+            flex: 1 1 100% !important;
+            min-width: 100% !important;
+        }
+
+        /* Smaller metric values so all four KPIs fit on one row */
+        div[data-testid="metric-container"] div[data-testid="metric-value"] {
+            font-size: 1.1rem;
+        }
+
+        div[data-testid="metric-container"] {
+            padding: 8px 10px;
+        }
+
+        /* Reduce heading sizes */
+        h1 { font-size: 1.3rem !important; }
+        h2, h3 { font-size: 1rem !important; }
+
+        /* Wrap the map legend on narrow screens */
+        .map-legend {
+            flex-wrap: wrap;
+            font-size: 0.7rem;
+        }
+
+        .legend-gradient { width: 100px; }
+
+        /* Hide sidebar by default on mobile */
+        section[data-testid="stSidebar"] {
+            display: none;
+        }
     }
     </style>
     """,
