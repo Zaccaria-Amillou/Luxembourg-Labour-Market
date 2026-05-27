@@ -125,6 +125,16 @@ st.markdown(
         section[data-testid="stSidebar"] {
             display: none;
         }
+
+        /* Prevent mobile keyboard from opening when tapping a selectbox.
+           Streamlit renders selectboxes as a styled <input> — on mobile this
+           triggers the keyboard. Setting pointer-events:none on the input and
+           caret-color:transparent blocks text entry while keeping the dropdown
+           tap-to-open behaviour fully intact. */
+        div[data-testid="stSelectbox"] input {
+            pointer-events: none;
+            caret-color: transparent;
+        }
     }
     </style>
     """,
