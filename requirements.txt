@@ -3,3 +3,5 @@ numpy
 streamlit
 plotly
 deep-translator
+matplotlib
+pydeck
